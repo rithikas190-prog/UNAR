@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="theme-color" content="#0f172a">
+    <title>UNAR - Know. Refine. Become.</title>
+    
+    <!-- PWA Manifest & Icons -->
+    <link rel="manifest" href="manifest.json">
+    <link rel="icon" type="image/png" href="icons/icon-192.png">
+    <link rel="apple-touch-icon" href="icons/icon-192.png">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="UNAR">
+    
+    <link rel="stylesheet" href="css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="app-shell">
+        <!-- Desktop Sidebar (Hidden on Mobile) -->
+        <aside class="desktop-sidebar hidden-mobile">
+            <div class="sidebar-header">
+                <div class="logo">UNAR</div>
+                <div class="subtitle">Know. Refine. Become.</div>
+            </div>
+            
+            <div class="sidebar-nav">
+                <button class="sidebar-link active" data-tab="home">Home</button>
+                <button class="sidebar-link" data-tab="interview">Interview</button>
+                <button class="sidebar-link" data-tab="profile">Profile</button>
+            </div>
+            
+            <div id="desktop-report-nav" class="sidebar-report-nav hidden">
+                <h4 class="sidebar-title">ASSESSMENT REPORT</h4>
+                <button class="sidebar-link" data-target="overview">Overview</button>
+                <button class="sidebar-link" data-target="behavior">Behavior</button>
+                <button class="sidebar-link" data-target="voice">Voice Analysis</button>
+                <button class="sidebar-link" data-target="answers">Answer Performance</button>
+                <button class="sidebar-link" data-target="questions">Question-wise</button>
+                <button class="sidebar-link" data-target="summary">Summary</button>
+            </div>
+        </aside>
+
+        <!-- App Header (Mobile Only) -->
+        <header class="app-header hidden-desktop">
+            <button id="btn-back" class="icon-btn" style="visibility: hidden;">←</button>
+            <h1 id="app-title" class="app-title">UNAR</h1>
+            <div class="header-right">
+                <button id="btn-menu" class="icon-btn">⋮</button>
+            </div>
+        </header>
+
+        <!-- App Content -->
+        <main class="app-content">
+            
+            <!-- HOME SCREEN -->
+            <section id="view-home" class="screen active">
+                <div class="screen-container">
+                    <div class="brand-center mb-3">
+                        <div class="logo">UNAR</div>
+                        <div class="subtitle">Know. Refine. Become.</div>
+                    </div>
+
+                    <div class="unar-panel text-center">
+                        <h2 class="mb-1">Good Evening</h2>
+                        <p class="text-muted mb-2">Ready for your assessment?</p>
+                        <button id="btn-home-start" class="btn btn-primary btn-large w-100">
+                            START INTERVIEW<br>
+                            <span class="text-sm" style="font-weight: 400;">AI-powered assessment</span>
+                        </button>
+                    </div>
+                    
+                    <h4 class="mt-3 mb-1 text-teal text-sm tracking-wide">LATEST ASSESSMENT</h4>
+                    <div class="unar-panel-inner flex-between align-center">
+                        <div>
+                            <div class="text-large" id="home-last-div">NONE</div>
+                            <div class="text-sm text-muted">Complete an interview first</div>
+                        </div>
+                        <div class="text-large text-teal" id="home-last-score">-</div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- REGISTRATION SCREEN -->
+            <section id="view-registration" class="screen hidden">
+                <div class="screen-container">
+                    <div class="unar-panel">
+                        <h2 class="mb-2">Setup Interview</h2>
+                        <form id="registration-form">
+                            <div class="form-group">
+                                <label for="reg-name">Full Name</label>
+                                <input type="text" id="reg-name" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="reg-id">Candidate ID</label>
+                                <input type="text" id="reg-id" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="reg-email">Email Address</label>
+                                <input type="email" id="reg-email" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="reg-dept">Department</label>
+                                <input type="text" id="reg-dept" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="reg-edu">Education</label>
+                                <input type="text" id="reg-edu" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="reg-type">Division</label>
+                                <select id="reg-type" required>
+                                    <option value="Technical">Technical</option>
+                                    <option value="HR">HR</option>
+                                    <option value="General">General</option>
+                                </select>
+                            </div>
+                            <button type="submit" class="btn btn-primary w-100 mt-2">Continue to Pre-check</button>
+                        </form>
+                    </div>
+                </div>
+            </section>
+
+            <!-- PRECHECK SCREEN -->
+            <section id="view-precheck" class="screen hidden">
+                <div class="screen-container">
+                    <div class="unar-panel">
+                        <h2 class="mb-2 text-center">CAMERA CHECK</h2>
+                        <div class="video-container">
+                            <video id="precheck-webcam" autoplay playsinline muted></video>
+                            <div class="overlay-text" id="precheck-status">Initializing...</div>
+                        </div>
+                        
+                        <div class="checklist mt-2">
+                            <div class="check-item" id="check-camera">
+                                <span class="indicator red">●</span> Camera Ready
+                            </div>
+                            <div class="check-item" id="check-mic">
+                                <span class="indicator red">●</span> Microphone Ready
+                            </div>
+                            <div class="check-item" id="check-face">
+                                <span class="indicator red">●</span> Face Detection Ready
+                            </div>
+                        </div>
+                        
+                        <button id="btn-start-interview" class="btn btn-primary w-100 mt-2" disabled>START INTERVIEW</button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- INTERVIEW SCREEN -->
+            <section id="view-interview" class="screen hidden">
+                <div class="screen-container interview-flex">
+                    <div class="video-container">
+                        <video id="webcam" autoplay playsinline muted></video>
+                        <canvas id="canvas" style="display: none;"></canvas>
+                        <div class="overlay-text" id="camera-status">Camera Offline</div>
+                    </div>
+                    
+                    <div class="mic-status mt-1 text-center" id="mic-status-indicator">Microphone: Waiting</div>
+                    <div id="error-message" class="error-msg hidden"></div>
+
+                    <div class="question-card mt-2 unar-panel flex-1 flex-col">
+                        <div class="question-tracker">
+                            <span id="question-number-display">Question 1 of 10</span>
+                            <div class="progress-bar-bg">
+                                <div class="progress-fill" id="question-progress" style="width: 10%"></div>
+                            </div>
+                        </div>
+                        <h3 id="current-question-text" class="mt-1 flex-1">Loading question...</h3>
+                        
+                        <div class="text-center mt-2">
+                            <div id="interview-status" class="status-badge status-waiting mb-1">Preparing...</div>
+                            <button id="btn-submit-answer" class="btn btn-primary btn-large w-100" disabled>SUBMIT ANSWER</button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ERROR SCREEN -->
+            <section id="view-error" class="screen hidden">
+                <div class="screen-container flex-center full-height">
+                    <div class="unar-panel text-center">
+                        <h2>Assessment Failed</h2>
+                        <p id="error-reason" class="mb-2 mt-1 text-muted">An error occurred while generating your report.</p>
+                        <button id="btn-retry-assessment" class="btn btn-primary w-100">RETRY FINALIZATION</button>
+                        <button id="btn-error-home" class="btn btn-outline w-100 mt-1">BACK TO HOME</button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- COMPLETION TRANSITION SCREEN -->
+            <section id="view-completion" class="screen hidden">
+                <div class="screen-container flex-center full-height">
+                    <div class="text-center">
+                        <div class="success-checkmark">
+                            <svg viewBox="0 0 52 52">
+                                <circle class="checkmark-circle" cx="26" cy="26" r="25" fill="none"/>
+                                <path class="checkmark-check" fill="none" d="M14.1 27.2l7.1 7.2 16.7-16.8"/>
+                            </svg>
+                        </div>
+                        <h2 class="tracking-wide">ASSESSMENT COMPLETE</h2>
+                        <p class="text-muted mt-1">Your UNAR assessment is ready.</p>
+                        <div class="loading-dots mt-2"><span>.</span><span>.</span><span>.</span></div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- RESULTS SCREENS (6 Sub-screens) -->
+            <section id="view-results" class="screen hidden">
+                
+                <!-- 1. OVERVIEW -->
+                <div id="res-overview" class="sub-screen active">
+                    <div class="screen-container pb-6">
+                        <div class="score-ring-container mt-2">
+                            <svg class="score-ring" viewBox="0 0 120 120">
+                                <circle class="ring-bg" cx="60" cy="60" r="50"></circle>
+                                <circle class="ring-progress" id="score-ring-progress" cx="60" cy="60" r="50"></circle>
+                            </svg>
+                            <div class="score-text">
+                                <span class="score-value" id="res-overall-score">0</span>
+                                <span class="score-max">%</span>
+                            </div>
+                            <div class="score-label">OVERALL SCORE</div>
+                        </div>
+                        
+                        <div class="category-bars unar-panel-inner mt-2">
+                            <h4 class="mb-1 text-teal text-sm tracking-wide">PERFORMANCE SNAPSHOT</h4>
+                            <div id="dynamic-category-bars">
+                                <!-- Bars injected dynamically by JS -->
+                            </div>
+                        </div>
+
+                        <div class="results-bottom-controls flex-end mt-3">
+                             <button class="btn btn-primary btn-nav-results" data-target="behavior">NEXT: BEHAVIOR →</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 2. BEHAVIOR -->
+                <div id="res-behavior" class="sub-screen hidden">
+                    <div class="screen-container pb-6">
+                        <h3 class="section-title mt-1">Camera & Body Language</h3>
+                        <div class="metrics-grid mt-2">
+                            <div class="metric-tile">
+                                <div class="tile-header">EYE CONTACT</div>
+                                <div class="tile-value" id="res-eye">0%</div>
+                                <div class="tile-status" id="stat-eye">UNAVAILABLE</div>
+                                <div class="tile-bar"><div class="tile-fill" id="fill-eye" style="width:0%"></div></div>
+                                <div class="tile-desc" id="desc-eye">Analysis unavailable</div>
+                            </div>
+                            <div class="metric-tile">
+                                <div class="tile-header">HEAD STABILITY</div>
+                                <div class="tile-value" id="res-head">0%</div>
+                                <div class="tile-status" id="stat-head">UNAVAILABLE</div>
+                                <div class="tile-bar"><div class="tile-fill" id="fill-head" style="width:0%"></div></div>
+                                <div class="tile-desc" id="desc-head">Analysis unavailable</div>
+                            </div>
+                            <div class="metric-tile">
+                                <div class="tile-header">FACE PRESENCE</div>
+                                <div class="tile-value" id="res-face">0%</div>
+                                <div class="tile-status" id="stat-face">UNAVAILABLE</div>
+                                <div class="tile-bar"><div class="tile-fill" id="fill-face" style="width:0%"></div></div>
+                                <div class="tile-desc" id="desc-face">Analysis unavailable</div>
+                            </div>
+                            <div class="metric-tile">
+                                <div class="tile-header">BLINK RATE</div>
+                                <div class="tile-value" id="res-blink">0/min</div>
+                                <div class="tile-status" id="stat-blink">UNAVAILABLE</div>
+                                <div class="tile-desc" id="desc-blink">Analysis unavailable</div>
+                            </div>
+                        </div>
+                        <div class="results-bottom-controls flex-between mt-3">
+                             <button class="btn btn-outline btn-nav-results" data-target="overview">← OVERVIEW</button>
+                             <button class="btn btn-primary btn-nav-results" data-target="voice">VOICE →</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 3. VOICE -->
+                <div id="res-voice" class="sub-screen hidden">
+                    <div class="screen-container pb-6">
+                        <h3 class="section-title mt-1">Voice Analysis</h3>
+                        <div class="metrics-grid mt-2">
+                            <div class="metric-tile">
+                                <div class="tile-value" id="res-wpm">0</div>
+                                <div class="tile-header">SPEECH RATE (WPM)</div>
+                            </div>
+                            <div class="metric-tile">
+                                <div class="tile-value" id="res-fillers">0</div>
+                                <div class="tile-header">FILLER WORDS</div>
+                            </div>
+                            <div class="metric-tile">
+                                <div class="tile-status text-large" id="stat-pauses">LOW</div>
+                                <div class="tile-header">LONG PAUSES</div>
+                            </div>
+                            <div class="metric-tile">
+                                <div class="tile-status text-large" id="stat-energy">STABLE</div>
+                                <div class="tile-header">VOICE ENERGY</div>
+                            </div>
+                        </div>
+                        
+                        <div class="mt-2 unar-panel-inner">
+                            <h4 class="text-sm tracking-wide text-teal">DELIVERY PERFORMANCE</h4>
+                            <div class="bar-row mt-1">
+                                <div class="bar-track"><div class="bar-fill" id="fill-voice-perf" style="width: 0%"></div></div>
+                                <div class="bar-value" id="val-voice-perf">0%</div>
+                            </div>
+                        </div>
+                        <div class="results-bottom-controls flex-between mt-3">
+                             <button class="btn btn-outline btn-nav-results" data-target="behavior">← BEHAVIOR</button>
+                             <button class="btn btn-primary btn-nav-results" data-target="answers">ANSWERS →</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 4. ANSWERS -->
+                <div id="res-answers" class="sub-screen hidden">
+                    <div class="screen-container pb-6">
+                        <h3 class="section-title mt-1">Answer Performance</h3>
+                        <div class="chart-container mt-2">
+                            <div class="css-bar-chart" id="answer-chart">
+                                <!-- Bars injected by JS -->
+                            </div>
+                            <div class="chart-x-axis" id="answer-chart-labels">
+                                <!-- Labels injected by JS -->
+                            </div>
+                        </div>
+                        <div class="results-bottom-controls flex-between mt-3">
+                             <button class="btn btn-outline btn-nav-results" data-target="voice">← VOICE</button>
+                             <button class="btn btn-primary btn-nav-results" data-target="questions">QUESTIONS →</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 5. QUESTIONS -->
+                <div id="res-questions" class="sub-screen hidden">
+                     <div class="screen-container pb-6">
+                        <div class="qw-grid-nav mt-1" id="qw-list">
+                            <!-- Injected by JS: 10 buttons -->
+                        </div>
+                        <div class="qw-card unar-panel-inner mt-2">
+                            <h4 id="qw-title" class="text-teal">QUESTION 1</h4>
+                            <p id="qw-question" class="mt-1 text-large">Loading...</p>
+                            
+                            <h5 class="mt-2 text-muted text-sm tracking-wide">YOUR RESPONSE</h5>
+                            <div id="qw-transcript" class="qw-a-text mt-1">...</div>
+                            
+                            <div class="flex-between align-end mt-2">
+                                <div>
+                                    <h5 class="text-muted text-sm tracking-wide">ANSWER SCORE</h5>
+                                    <div class="qw-score-val"><span id="qw-score">0</span><span class="text-sm text-muted">/100</span></div>
+                                </div>
+                            </div>
+                            
+                            <div class="mt-2">
+                                <h5 class="text-muted text-sm tracking-wide mb-1">STRENGTHS</h5>
+                                <ul id="qw-strengths" class="custom-list check-list text-sm"></ul>
+                            </div>
+                            <div class="mt-2">
+                                <h5 class="text-muted text-sm tracking-wide mb-1">IMPROVEMENTS</h5>
+                                <ul id="qw-improvements" class="custom-list dot-list text-sm"></ul>
+                            </div>
+                        </div>
+                        <div class="results-bottom-controls flex-between mt-3">
+                             <button class="btn btn-outline btn-nav-results" data-target="answers">← ANSWERS</button>
+                             <button class="btn btn-primary btn-nav-results" data-target="summary">SUMMARY →</button>
+                        </div>
+                     </div>
+                </div>
+
+                <!-- 6. SUMMARY -->
+                <div id="res-summary" class="sub-screen hidden">
+                     <div class="screen-container pb-6">
+                        <div class="unar-panel-inner mt-2">
+                            <h4 class="text-teal text-sm tracking-wide">TOP STRENGTHS</h4>
+                            <ul id="res-list-strengths" class="custom-list check-list mt-1"></ul>
+                        </div>
+                        <div class="unar-panel-inner mt-2">
+                            <h4 class="text-teal text-sm tracking-wide">FOCUS AREAS</h4>
+                            <ul id="res-list-improvements" class="custom-list dot-list mt-1"></ul>
+                        </div>
+                        <div class="summary-content mt-2">
+                            <h4 class="text-teal text-sm tracking-wide">AI ASSESSMENT</h4>
+                            <p id="res-summary-text" class="leading-relaxed mt-1">...</p>
+                            
+                            <h4 class="text-teal mt-2 text-sm tracking-wide">RECOMMENDED NEXT STEPS</h4>
+                            <ol id="res-recommendations" class="custom-list num-list mt-1"></ol>
+                        </div>
+                        <div class="mt-3">
+                             <button class="btn btn-primary btn-large w-100" id="btn-download-report">DOWNLOAD REPORT</button>
+                        </div>
+                        <div class="results-bottom-controls mt-1 flex-col gap-1">
+                             <button class="btn btn-outline btn-nav-results w-100" data-target="questions">← BACK TO QUESTIONS</button>
+                        </div>
+                     </div>
+                </div>
+            </section>
+            
+            <!-- PROFILE SCREEN -->
+            <section id="view-profile" class="screen hidden">
+                <div class="screen-container flex-center full-height">
+                    <div class="text-center unar-panel">
+                        <h3 class="text-teal tracking-wide mb-1">PROFILE</h3>
+                        <p class="text-muted">Profile features are coming soon.</p>
+                    </div>
+                </div>
+            </section>
+
+        </main>
+
+        <!-- App Bottom Nav (Mobile Only) -->
+        <nav class="app-bottom-nav hidden-desktop" id="app-bottom-nav">
+            <button class="nav-tab active" data-tab="home">
+                <span class="nav-icon">🏠</span><span class="nav-text">Home</span>
+            </button>
+            <button class="nav-tab" data-tab="interview">
+                <span class="nav-icon">🎙</span><span class="nav-text">Interview</span>
+            </button>
+            <button class="nav-tab" data-tab="results">
+                <span class="nav-icon">📊</span><span class="nav-text">Results</span>
+            </button>
+            <button class="nav-tab" data-tab="profile">
+                <span class="nav-icon">👤</span><span class="nav-text">Profile</span>
+            </button>
+        </nav>
+    </div>
+    
+    <script src="js/app.js"></script>
+</body>
+</html>

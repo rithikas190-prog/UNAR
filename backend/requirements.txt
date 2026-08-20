@@ -1,0 +1,9 @@
+fastapi
+uvicorn
+websockets
+opencv-python-headless
+mediapipe
+numpy
+python-multipart
+reportlab
+SpeechRecognition
